@@ -55,11 +55,18 @@ message CountRequest {
     uint32 shardFacets = 3; // defaults to maxFacets * 10, ignored for single shard indexes, set to -1 to get all
 }
 
-
 message FacetCount {
     string facet = 1;
     uint64 count = 2;
     uint64 maxError = 3;
+}
+
+message AggregationRequest {
+    repeated SumRequest sumRequest = 1;
+}
+
+message SumRequest {
+    string field = 1;
 }
 
 message FacetGroup {
