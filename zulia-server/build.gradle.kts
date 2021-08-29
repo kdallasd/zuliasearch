@@ -40,6 +40,7 @@ dependencies {
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut:micronaut-http-client")
+
     runtimeOnly("ch.qos.logback:logback-classic")
     testAnnotationProcessor(platform("io.micronaut:micronaut-bom:$micronautVersion"))
     testAnnotationProcessor("io.micronaut:micronaut-inject-java")
@@ -49,6 +50,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
     //implementation("org.graalvm.js:js:20.2.0")
+    implementation("com.datadoghq:sketches-java:0.7.0")
 }
 
 val zuliaScriptTask = tasks.getByName<CreateStartScripts>("startScripts")
