@@ -37,6 +37,7 @@ dependencies {
     implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
     implementation("io.micronaut:micronaut-inject")
     implementation("io.micronaut:micronaut-validation")
+    implementation("io.micronaut.reactor:micronaut-reactor")
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut:micronaut-http-client")
@@ -47,6 +48,7 @@ dependencies {
     testImplementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("io.micronaut.test:micronaut-test-junit5")
+    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.1.3")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
     //implementation("org.graalvm.js:js:20.2.0")

@@ -61,6 +61,7 @@ import org.bson.Document;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -100,24 +101,25 @@ public class ZuliaIndex {
 	private final DocumentStorage documentStorage;
 	private final ZuliaConfig zuliaConfig;
 
-	private Timer commitTimer;
-	private TimerTask commitTask;
-	private ZuliaPerFieldAnalyzer zuliaPerFieldAnalyzer;
+	private final Timer commitTimer;
+	private final TimerTask commitTask;
+	private final ZuliaPerFieldAnalyzer zuliaPerFieldAnalyzer;
 	private final IndexService indexService;
 
-	private IndexMapping indexMapping;
-	private FacetsConfig facetsConfig;
+	private final IndexMapping indexMapping;
+	private final FacetsConfig facetsConfig;
 
-	public ZuliaIndex(ZuliaConfig zuliaConfig, ServerIndexConfig indexConfig, DocumentStorage documentStorage, IndexService indexService) {
+	public ZuliaIndex(ZuliaConfig zuliaConfig, ServerIndexConfig indexConfig, DocumentStorage documentStorage, IndexService indexService,
+			IndexMapping indexMapping) {
 
 		this.zuliaConfig = zuliaConfig;
 		this.indexConfig = indexConfig;
 		this.indexName = indexConfig.getIndexName();
 		this.numberOfShards = indexConfig.getNumberOfShards();
 		this.indexService = indexService;
-
+		this.indexMapping = indexMapping;
 		this.facetsConfig = new FacetsConfig();
-		this.facetsConfig.setIndexFieldName("myField", "$facets.float");
+		configureFacets();
 
 		this.documentStorage = documentStorage;
 
@@ -416,8 +418,8 @@ public class ZuliaIndex {
 		booleanQueryBuilder.setMinimumNumberShouldMatch(mm);
 		for (int i = 0; i < signature.length; i++) {
 			String fieldName = ZuliaConstants.SUPERBIT_PREFIX + "." + field + "." + i;
-			booleanQueryBuilder
-					.add(new BooleanClause(new TermQuery(new org.apache.lucene.index.Term(fieldName, signature[i] ? "1" : "0")), BooleanClause.Occur.SHOULD));
+			booleanQueryBuilder.add(
+					new BooleanClause(new TermQuery(new org.apache.lucene.index.Term(fieldName, signature[i] ? "1" : "0")), BooleanClause.Occur.SHOULD));
 		}
 
 		return booleanQueryBuilder.build();
@@ -774,7 +776,7 @@ public class ZuliaIndex {
 
 		IndexSettings indexSettings = indexService.getIndex(indexName);
 		indexConfig.configure(indexSettings);
-
+		configureFacets();
 		zuliaPerFieldAnalyzer.refresh();
 
 		for (ZuliaShard s : primaryShardMap.values()) {
@@ -793,6 +795,12 @@ public class ZuliaIndex {
 			}
 		}
 
+	}
+
+	public void configureFacets() {
+		for (String facetField : indexConfig.getFacetFields()) {
+			facetsConfig.setHierarchical(facetField, indexConfig.isHierarchicalFacet(facetField));
+		}
 	}
 
 	public OptimizeResponse optimize(OptimizeRequest request) throws Exception {
@@ -1019,10 +1027,8 @@ public class ZuliaIndex {
 
 	}
 
-	public void storeAssociatedDocument(String uniqueId, String fileName, InputStream is, long clusterTime, Document metadata) throws Exception {
-
-		documentStorage.storeAssociatedDocument(uniqueId, fileName, is, clusterTime, metadata);
-
+	public OutputStream getAssociatedDocumentOutputStream(String uniqueId, String fileName, long clusterTime, Document metadata) throws Exception {
+		return documentStorage.getAssociatedDocumentOutputStream(uniqueId, fileName, clusterTime, metadata);
 	}
 
 	public InputStream getAssociatedDocumentStream(String uniqueId, String fileName) throws Exception {
@@ -1059,10 +1065,6 @@ public class ZuliaIndex {
 
 		return documentStorage.getAssociatedDocuments(uniqueId, associatedFetchType);
 
-	}
-
-	public void setIndexMapping(IndexMapping indexMapping) {
-		this.indexMapping = indexMapping;
 	}
 
 	public IndexMapping getIndexMapping() {
