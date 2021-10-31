@@ -1,7 +1,6 @@
 /*
- * This file is imported from com.datadoghq:sketches-java:0.7.0 and is licensed as stated by datadoghq
- * This file is included in the com.datadoghq:sketches-java:0.7.0 jar file but copied here for easier referencing from the build process
- *
+ * This file is imported from com.datadoghq:sketches-java:0.8.1 and is licensed as stated by datadoghq
+ * This file is included in the com.datadoghq:sketches-java:0.8.1 jar file but copied here for easier referencing from the build process
  * Licensed under the Apache License 2.0.
  * This product includes software developed at Datadog (https://www.datadoghq.com/).
  * Copyright 2021 Datadog, Inc.
@@ -52,6 +51,7 @@ message IndexMapping {
     LINEAR = 1;
     QUADRATIC = 2;
     CUBIC = 3;
+    QUARTIC = 4;
   }
 }
 
