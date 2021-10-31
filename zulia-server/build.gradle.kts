@@ -52,7 +52,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
     //implementation("org.graalvm.js:js:20.2.0")
-    implementation("com.datadoghq:sketches-java:0.7.0")
+    implementation("com.datadoghq:sketches-java:0.8.1")
 }
 
 val zuliaScriptTask = tasks.getByName<CreateStartScripts>("startScripts")
