@@ -2,6 +2,7 @@ package io.zulia.server.config.single;
 
 import com.google.protobuf.util.JsonFormat;
 import io.zulia.message.ZuliaIndex;
+import io.zulia.message.ZuliaIndex.ZIndexMapping;
 import io.zulia.server.config.IndexService;
 import io.zulia.server.config.ZuliaConfig;
 
@@ -96,15 +97,15 @@ public class FSIndexService implements IndexService {
 	}
 
 	@Override
-	public List<ZuliaIndex.IndexMapping> getIndexMappings() {
+	public List<ZIndexMapping> getIndexMappings() {
 
 		if (Paths.get(baseDir).toFile().exists()) {
 			JsonFormat.Parser parser = JsonFormat.parser();
-			List<ZuliaIndex.IndexMapping> indexMappings = new ArrayList<>();
+			List<ZIndexMapping> indexMappings = new ArrayList<>();
 			for (File files : Paths.get(baseDir).toFile().listFiles()) {
 				try {
 					if (files.getName().endsWith(MAPPING_EXTENSION)) {
-						ZuliaIndex.IndexMapping.Builder indexMapping = ZuliaIndex.IndexMapping.newBuilder();
+						ZIndexMapping.Builder indexMapping = ZIndexMapping.newBuilder();
 						parser.merge(new FileReader(files), indexMapping);
 						indexMappings.add(indexMapping.build());
 					}
@@ -121,10 +122,10 @@ public class FSIndexService implements IndexService {
 	}
 
 	@Override
-	public ZuliaIndex.IndexMapping getIndexMapping(String indexName) throws IOException {
+	public ZIndexMapping getIndexMapping(String indexName) throws IOException {
 		File indexMapping = new File(baseDir + File.separator + indexName + MAPPING_EXTENSION);
 		if (indexMapping.exists()) {
-			ZuliaIndex.IndexMapping.Builder indexMappingBuilder = ZuliaIndex.IndexMapping.newBuilder();
+			ZIndexMapping.Builder indexMappingBuilder = ZIndexMapping.newBuilder();
 			JsonFormat.parser().merge(new FileReader(indexMapping), indexMappingBuilder);
 			return indexMappingBuilder.build();
 		}
@@ -133,7 +134,7 @@ public class FSIndexService implements IndexService {
 	}
 
 	@Override
-	public void storeIndexMapping(ZuliaIndex.IndexMapping indexMapping) throws IOException {
+	public void storeIndexMapping(ZIndexMapping indexMapping) throws IOException {
 		JsonFormat.Printer printer = JsonFormat.printer();
 		String indexMappingJson = printer.print(indexMapping);
 		writeFile(indexMappingJson, indexMapping.getIndexName() + MAPPING_EXTENSION);

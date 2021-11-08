@@ -3,9 +3,9 @@ package io.zulia.server.index;
 import io.zulia.message.ZuliaBase;
 import io.zulia.message.ZuliaBase.MasterSlaveSettings;
 import io.zulia.message.ZuliaBase.Node;
-import io.zulia.message.ZuliaIndex.IndexMapping;
 import io.zulia.message.ZuliaIndex.IndexSettings;
 import io.zulia.message.ZuliaIndex.ShardMapping;
+import io.zulia.message.ZuliaIndex.ZIndexMapping;
 import io.zulia.message.ZuliaQuery;
 import io.zulia.message.ZuliaServiceOuterClass.*;
 import io.zulia.server.config.IndexService;
@@ -154,7 +154,7 @@ public class ZuliaIndexManager {
 	private void loadIndex(IndexSettings indexSettings) throws Exception {
 		LOG.info(zuliaConfig.getServerAddress() + ":" + zuliaConfig.getServicePort() + " loading index <" + indexSettings.getIndexName() + ">");
 
-		IndexMapping indexMapping = indexService.getIndexMapping(indexSettings.getIndexName());
+		ZIndexMapping indexMapping = indexService.getIndexMapping(indexSettings.getIndexName());
 
 		ServerIndexConfig serverIndexConfig = new ServerIndexConfig(indexSettings);
 
@@ -224,7 +224,7 @@ public class ZuliaIndexManager {
 
 	public GetNodesResponse getNodes(GetNodesRequest request) throws Exception {
 
-		List<IndexMapping> indexMappingList = indexService.getIndexMappings();
+		List<ZIndexMapping> indexMappingList = indexService.getIndexMappings();
 		if ((request.getActiveOnly())) {
 			return GetNodesResponse.newBuilder().addAllNode(currentOtherNodesActive).addNode(thisNode).addAllIndexMapping(indexMappingList).build();
 		}
@@ -319,7 +319,7 @@ public class ZuliaIndexManager {
 
 			indexSettings = indexSettings.toBuilder().setCreateTime(currentTimeMillis).build();
 
-			IndexMapping.Builder indexMapping = IndexMapping.newBuilder();
+			ZIndexMapping.Builder indexMapping = ZIndexMapping.newBuilder();
 			indexMapping.setIndexName(indexName);
 			indexMapping.setNumberOfShards(indexSettings.getNumberOfShards());
 

@@ -1,5 +1,6 @@
 package io.zulia.client.pool;
 
+import io.zulia.message.ZuliaIndex;
 import io.zulia.util.ShardUtil;
 
 import java.util.ArrayList;
@@ -12,7 +13,6 @@ import java.util.Random;
 import java.util.Set;
 
 import static io.zulia.message.ZuliaBase.Node;
-import static io.zulia.message.ZuliaIndex.IndexMapping;
 import static io.zulia.message.ZuliaIndex.ShardMapping;
 
 public class IndexRouting {
@@ -22,8 +22,8 @@ public class IndexRouting {
 	private Map<String, Map<Integer, Node>> indexMapping = new HashMap<>();
 	private Map<String, Integer> shardCountMapping = new HashMap<>();
 
-	public IndexRouting(List<IndexMapping> indexMappingList) {
-		for (IndexMapping im : indexMappingList) {
+	public IndexRouting(List<ZuliaIndex.ZIndexMapping> indexMappingList) {
+		for (ZuliaIndex.ZIndexMapping im : indexMappingList) {
 			Map<Integer, Node> segmentMapping = new HashMap<>();
 			for (ShardMapping sg : im.getShardMappingList()) {
 				// TODO: Does this need to know primary or replica?

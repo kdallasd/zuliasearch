@@ -68,6 +68,7 @@ message QueryRequest {
     bool debug = 15;
     bool dontCache = 16;
     MasterSlaveSettings masterSlaveSettings = 17;
+    StatRequest statRequest = 18;
 }
 
 message QueryResponse {
@@ -250,7 +251,7 @@ message GetNodesRequest {
 
 message GetNodesResponse {
     repeated Node node = 1;
-    repeated IndexMapping indexMapping = 2;
+    repeated ZIndexMapping indexMapping = 2;
 }
 
 message GetIndexSettingsRequest {

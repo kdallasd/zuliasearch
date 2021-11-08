@@ -16,6 +16,7 @@ import io.zulia.client.config.ZuliaPoolConfig;
 import io.zulia.client.rest.ZuliaRESTClient;
 import io.zulia.client.result.GetNodesResult;
 import io.zulia.client.result.Result;
+import io.zulia.message.ZuliaIndex;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
@@ -28,7 +29,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static io.zulia.message.ZuliaBase.Node;
-import static io.zulia.message.ZuliaIndex.IndexMapping;
 
 public class ZuliaPool {
 
@@ -142,7 +142,7 @@ public class ZuliaPool {
 		return node.getServerAddress() + ":" + node.getServicePort();
 	}
 
-	public void updateIndexMappings(List<IndexMapping> list) {
+	public void updateIndexMappings(List<ZuliaIndex.ZIndexMapping> list) {
 		indexRouting = new IndexRouting(list);
 	}
 

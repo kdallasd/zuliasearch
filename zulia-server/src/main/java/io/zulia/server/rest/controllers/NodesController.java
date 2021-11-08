@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.TreeSet;
 
 import static io.zulia.message.ZuliaBase.Node;
-import static io.zulia.message.ZuliaIndex.IndexMapping;
 import static io.zulia.message.ZuliaIndex.ShardMapping;
+import static io.zulia.message.ZuliaIndex.ZIndexMapping;
 import static io.zulia.message.ZuliaServiceOuterClass.GetNodesRequest;
 import static io.zulia.message.ZuliaServiceOuterClass.GetNodesResponse;
 
@@ -51,7 +51,7 @@ public class NodesController {
 				memberObj.put("heartbeat", node.getHeartbeat());
 
 				List<Document> indexMappingList = new ArrayList<>();
-				for (IndexMapping indexMapping : getNodesResponse.getIndexMappingList()) {
+				for (ZIndexMapping indexMapping : getNodesResponse.getIndexMappingList()) {
 
 					TreeSet<Integer> primaryShards = new TreeSet<>();
 					TreeSet<Integer> replicaShards = new TreeSet<>();

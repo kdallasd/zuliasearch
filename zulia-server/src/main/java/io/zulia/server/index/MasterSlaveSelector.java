@@ -2,8 +2,8 @@ package io.zulia.server.index;
 
 import io.zulia.message.ZuliaBase.MasterSlaveSettings;
 import io.zulia.message.ZuliaBase.Node;
-import io.zulia.message.ZuliaIndex.IndexMapping;
 import io.zulia.message.ZuliaIndex.ShardMapping;
+import io.zulia.message.ZuliaIndex.ZIndexMapping;
 import io.zulia.message.ZuliaServiceOuterClass.IndexRouting;
 import io.zulia.server.exceptions.ShardDoesNotExistException;
 import io.zulia.server.exceptions.ShardOfflineException;
@@ -17,7 +17,7 @@ public class MasterSlaveSelector {
 
 	private final MasterSlaveSettings masterSlaveSettings;
 	private final List<Node> nodes;
-	private IndexMapping indexMapping;
+	private ZIndexMapping indexMapping;
 
 	/**
 	 *
@@ -25,7 +25,7 @@ public class MasterSlaveSelector {
 	 * @param nodes - list of nodes to select from, order of the list determines secondary that is selected
 	 * @param indexMapping -
 	 */
-	public MasterSlaveSelector(MasterSlaveSettings masterSlaveSettings, List<Node> nodes, IndexMapping indexMapping) {
+	public MasterSlaveSelector(MasterSlaveSettings masterSlaveSettings, List<Node> nodes, ZIndexMapping indexMapping) {
 		this.masterSlaveSettings = masterSlaveSettings;
 		this.nodes = nodes;
 		this.indexMapping = indexMapping;

@@ -1,8 +1,8 @@
 package io.zulia.server.config;
 
 import io.zulia.message.ZuliaIndex;
-import io.zulia.message.ZuliaIndex.IndexMapping;
 import io.zulia.message.ZuliaIndex.IndexSettings;
+import io.zulia.message.ZuliaIndex.ZIndexMapping;
 
 import java.util.List;
 
@@ -43,20 +43,20 @@ public interface IndexService {
 	 *
 	 * @return - returns all index mapping for a cluster, {@code null} if nothing exists
 	 */
-	List<IndexMapping> getIndexMappings() throws Exception;
+	List<ZIndexMapping> getIndexMappings() throws Exception;
 
 	/**
 	 *
 	 * @param indexName - index name to fetch server mapping from
 	 * @return - index mapping for an index, {@code null} if nothing exists
 	 */
-	IndexMapping getIndexMapping(String indexName) throws Exception;
+	ZIndexMapping getIndexMapping(String indexName) throws Exception;
 
 	/**
 	 * Creates or updates index mapping
 	 * @param indexMapping - index mapping to create or update
 	 */
-	void storeIndexMapping(IndexMapping indexMapping) throws Exception;
+	void storeIndexMapping(ZIndexMapping indexMapping) throws Exception;
 
 	/**
 	 * remove an index mapping from the config storage

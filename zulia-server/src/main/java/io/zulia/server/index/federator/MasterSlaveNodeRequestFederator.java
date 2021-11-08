@@ -2,6 +2,7 @@ package io.zulia.server.index.federator;
 
 import io.zulia.message.ZuliaBase;
 import io.zulia.message.ZuliaBase.Node;
+import io.zulia.message.ZuliaIndex.ZIndexMapping;
 import io.zulia.message.ZuliaServiceOuterClass.IndexRouting;
 import io.zulia.server.exceptions.ShardOfflineException;
 import io.zulia.server.index.MasterSlaveSelector;
@@ -33,7 +34,7 @@ public abstract class MasterSlaveNodeRequestFederator<I, O> extends NodeRequestF
 		nodesAvailable.addAll(otherNodesActive);
 
 		for (ZuliaIndex index : indexes) {
-			io.zulia.message.ZuliaIndex.IndexMapping indexMapping = index.getIndexMapping();
+			ZIndexMapping indexMapping = index.getIndexMapping();
 			MasterSlaveSelector masterSlaveSelector = new MasterSlaveSelector(masterSlaveSettings, nodesAvailable, indexMapping);
 
 			Map<Node, IndexRouting.Builder> nodesForIndex = masterSlaveSelector.getNodesForIndex();

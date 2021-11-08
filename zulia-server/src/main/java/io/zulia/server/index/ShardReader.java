@@ -29,7 +29,6 @@ import org.apache.lucene.facet.FacetsCollector;
 import org.apache.lucene.facet.FacetsConfig;
 import org.apache.lucene.facet.LabelAndValue;
 import org.apache.lucene.facet.taxonomy.FastTaxonomyFacetCounts;
-import org.apache.lucene.facet.taxonomy.TaxonomyFacetSumValueSource;
 import org.apache.lucene.facet.taxonomy.TaxonomyReader;
 import org.apache.lucene.facet.taxonomy.directory.DirectoryTaxonomyReader;
 import org.apache.lucene.index.DirectoryReader;
@@ -193,6 +192,7 @@ public class ShardReader implements AutoCloseable {
 		ZuliaQuery.ShardQueryResponse.Builder shardQueryReponseBuilder = ZuliaQuery.ShardQueryResponse.newBuilder();
 
 		try {
+
 			if ((facetRequest != null) && !facetRequest.getCountRequestList().isEmpty()) {
 
 				searchWithFacets(facetRequest, query, indexSearcher, collector, shardQueryReponseBuilder);
@@ -356,11 +356,6 @@ public class ShardReader implements AutoCloseable {
 		indexSearcher.search(q, MultiCollector.wrap(collector, facetsCollector));
 
 		Facets facets = getFacets(facetsCollector);
-
-		{
-			TaxonomyFacetSumValueSource sumFacets = new TaxonomyFacetSumValueSource(taxoReader, facetsConfig, facetsCollector,
-					DoubleValuesSource.fromIntField("num"));
-		}
 
 		for (ZuliaQuery.CountRequest countRequest : facetRequest.getCountRequestList()) {
 

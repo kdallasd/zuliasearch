@@ -4,8 +4,8 @@ import com.google.protobuf.util.JsonFormat;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.ReplaceOptions;
-import io.zulia.message.ZuliaIndex.IndexMapping;
 import io.zulia.message.ZuliaIndex.IndexSettings;
+import io.zulia.message.ZuliaIndex.ZIndexMapping;
 import io.zulia.server.config.IndexService;
 import org.bson.Document;
 
@@ -81,13 +81,13 @@ public class MongoIndexService implements IndexService {
 	}
 
 	@Override
-	public List<IndexMapping> getIndexMappings() throws Exception {
+	public List<ZIndexMapping> getIndexMappings() throws Exception {
 
-		List<IndexMapping> indexMappings = new ArrayList<>();
+		List<ZIndexMapping> indexMappings = new ArrayList<>();
 		for (Document doc : mappingCollection.find()) {
 
 			Document indexMappingDoc = (Document) doc.get(INDEX_MAPPING);
-			IndexMapping.Builder builder = IndexMapping.newBuilder();
+			ZIndexMapping.Builder builder = ZIndexMapping.newBuilder();
 			JsonFormat.parser().merge(indexMappingDoc.toJson(), builder);
 
 			indexMappings.add(builder.build());
@@ -103,13 +103,13 @@ public class MongoIndexService implements IndexService {
 	}
 
 	@Override
-	public IndexMapping getIndexMapping(String indexName) throws Exception {
+	public ZIndexMapping getIndexMapping(String indexName) throws Exception {
 		Document doc = mappingCollection.find(new Document(ID, indexName)).first();
 
 		if (doc != null) {
 			Document indexingDoc = (Document) doc.get(INDEX_MAPPING);
 
-			IndexMapping.Builder builder = IndexMapping.newBuilder();
+			ZIndexMapping.Builder builder = ZIndexMapping.newBuilder();
 			JsonFormat.parser().merge(indexingDoc.toJson(), builder);
 			return builder.build();
 		}
@@ -119,10 +119,10 @@ public class MongoIndexService implements IndexService {
 	}
 
 	@Override
-	public void storeIndexMapping(IndexMapping indexMapping) throws Exception {
+	public void storeIndexMapping(ZIndexMapping indexMapping) throws Exception {
 
-		Document indexMappingDoc = new Document(ID, indexMapping.getIndexName())
-				.append(INDEX_MAPPING, Document.parse(JsonFormat.printer().print(indexMapping)));
+		Document indexMappingDoc = new Document(ID, indexMapping.getIndexName()).append(INDEX_MAPPING,
+				Document.parse(JsonFormat.printer().print(indexMapping)));
 
 		mappingCollection.replaceOne(new Document(ID, indexMapping.getIndexName()), indexMappingDoc, new ReplaceOptions().upsert(true));
 	}
