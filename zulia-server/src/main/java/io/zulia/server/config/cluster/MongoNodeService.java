@@ -34,7 +34,7 @@ public class MongoNodeService implements NodeService {
 		this.clusterName = clusterName;
 
 		MongoCollection<Document> collection = getCollection();
-		collection.createIndex(new Document(SERVER_ADDRESS, 1).append(SERVICE_PORT, 1), new IndexOptions().unique(true).background(true));
+		collection.createIndex(new Document(SERVER_ADDRESS, 1).append(SERVICE_PORT, 1), new IndexOptions().background(true));
 
 	}
 
@@ -87,7 +87,7 @@ public class MongoNodeService implements NodeService {
 	@Override
 	public void updateVersion(String serverAddress, int servicePort, String version) {
 		Document query = new Document(SERVER_ADDRESS, serverAddress).append(SERVICE_PORT, servicePort);
-		getCollection().updateOne(query, new Document("version", ZuliaVersion.getVersion()));
+		getCollection().updateMany(query, new Document("version", ZuliaVersion.getVersion()));
 	}
 
 	@Override
